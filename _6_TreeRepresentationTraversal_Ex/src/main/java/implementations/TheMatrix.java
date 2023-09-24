@@ -1,5 +1,8 @@
 package implementations;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class TheMatrix {
     private char[][] matrix;
     private char fillChar;
@@ -16,10 +19,39 @@ public class TheMatrix {
     }
 
     public void solve() {
-        fillMatrix(this.startRow, this.startCol);
+        //fillMatrix(this.startRow, this.startCol);
+
+        Deque<int[]> coordinates = new ArrayDeque<>();
+
+        coordinates.offer(new int[]{this.startRow, this.startCol});
+
+        while (!coordinates.isEmpty()) {
+            int[] position = coordinates.poll();
+
+            int row = position[0];
+            int col = position[1];
+
+            this.matrix[row][col] = this.fillChar;
+
+            if (isInBounds(row + 1, col) && this.matrix[row + 1][col] == this.startChar) {
+                coordinates.offer(new int[]{row + 1, col});
+            }
+            if (isInBounds(row - 1, col) && this.matrix[row - 1][col] == this.startChar) {
+                coordinates.offer(new int[]{row - 1, col});
+            }if (isInBounds(row, col + 1) && this.matrix[row][col + 1] == this.startChar) {
+                coordinates.offer(new int[]{row, col + 1});
+            }if (isInBounds(row, col - 1) && this.matrix[row][col - 1] == this.startChar) {
+                coordinates.offer(new int[]{row, col - 1});
+            }
+        }
+
     }
 
-    private void fillMatrix(int row, int col) {
+    private boolean isInBounds(int row, int col) {
+        return !isOutOfBounds(row, col);
+    }
+
+    /*private void fillMatrix(int row, int col) {
         if (isOutOfBounds(row,col) || this.matrix[row][col] != this.startChar) {
             return;
         }
@@ -29,7 +61,7 @@ public class TheMatrix {
         this.fillMatrix(row, col + 1);
         this.fillMatrix(row - 1, col);
         this.fillMatrix(row, col - 1);
-    }
+    }*/
 
     private boolean isOutOfBounds(int row, int col) {
         return row < 0 || row >= this.matrix.length || col < 0 || col >= this.matrix[row].length;
