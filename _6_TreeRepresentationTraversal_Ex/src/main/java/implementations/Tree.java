@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Tree<E> implements AbstractTree<E> {
 
@@ -75,18 +76,20 @@ public class Tree<E> implements AbstractTree<E> {
         return sb.toString();
     }
 
-    public String traverseWithBFS() {
+    public List<Tree<E>> traverseWithBFS() {
         StringBuilder builder = new StringBuilder();
 
         Deque<Tree<E>> queue = new ArrayDeque<>();
 
         queue.push(this);
 
+        List<Tree<E>> allNodes = new ArrayList<>();
+
         int ident = 0;
 
         while (!queue.isEmpty()) {
             Tree<E> tree = queue.poll();
-
+            allNodes.add(tree);
             if (tree.getParent() != null && tree.getParent().getKey().equals(this.getKey())) {
                 ident = 2;
             } else if (tree.children.size() == 0) {
@@ -102,12 +105,17 @@ public class Tree<E> implements AbstractTree<E> {
             }
         }
 
-        return builder.toString().trim();
+        //return builder.toString().trim();
+        return allNodes;
     }
 
     @Override
     public List<E> getLeafKeys() {
-        return null;
+        return traverseWithBFS()
+                .stream()
+                .filter(tree -> tree.children.isEmpty())
+                .map(Tree::getKey)
+                .collect(Collectors.toList());
     }
 
     @Override
