@@ -33,6 +33,13 @@ public class MinHeapTest {
     public void testHeapifyUpAddMany() {
         assertEquals(5, minHeap.peek().getPrice());
     }
+    @Test
+    public void testHeapifyDownAddMany() {
+        minHeap.poll();
+        assertEquals(6, minHeap.peek().getPrice());
+        minHeap.poll();
+        assertEquals(6, minHeap.peek().getPrice());
+    }
 
     @Test
     public void testSizeShouldBeCorrect() {
