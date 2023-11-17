@@ -91,7 +91,21 @@ public class AVL<T extends Comparable<T>> {
     }
 
     public void deleteMax() {
-        throw new UnsupportedOperationException();
+        this.root = deleteMax(this.root);
+    }
+
+    private Node<T> deleteMax(Node<T> node) {
+        if (node == null) {
+            return null;
+        }
+
+        if (node.right == null) {
+            return node.left;
+        }
+
+        node.right = this.deleteMax(node.right);
+        updateHeight(node);
+        return balance(node);
     }
 
     private void eachInOrder(Node<T> node, Consumer<T> action) {
